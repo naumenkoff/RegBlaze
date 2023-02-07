@@ -1,4 +1,5 @@
-﻿using RegistrySearcher.Helpers;
+﻿using RegistrySearcher.Enums;
+using RegistrySearcher.Helpers;
 using RegistrySearcher.Models;
 using RegistrySearcher.Services;
 
@@ -6,7 +7,13 @@ var findWhat = ConsoleInteractionHelper.RequestInput("I want to find > ", Consol
 var searchService = new SearchService(findWhat);
 var searchMatches = searchService.RunRegistrySearch();
 
-var searchResult = new SearchResult(searchMatches);
+var option = ConsoleInteractionHelper.RequestKeystroke(
+    "If you want to display only the registry keys in which matches were found, press Y > ", ConsoleKey.Y,
+    ConsoleColor.Red)
+    ? JsonSaveOption.OnlyKeys
+    : JsonSaveOption.WholeMatch;
+
+var searchResult = new SearchResult(searchMatches, option);
 ConsoleInteractionHelper.PrintColoredLine(searchResult.GetSerializedSearchMatches(), ConsoleColor.White);
 ConsoleInteractionHelper.PrintColoredLine(searchService.GetServiceResultMessage(), ConsoleColor.Green);
 

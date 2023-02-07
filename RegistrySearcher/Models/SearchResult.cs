@@ -1,16 +1,20 @@
 ﻿using System.Text.Json;
+using RegistrySearcher.Enums;
 
 namespace RegistrySearcher.Models;
 
 public class SearchResult
 {
+    private readonly JsonSaveOption _jsonSaveOption;
     private readonly List<SearchMatch> _searchMatches;
     private readonly string _serializedSearchMatches;
 
     /// <param name="searchMatches">the list of search matches that is returned as a result of the search service.</param>
-    public SearchResult(List<SearchMatch> searchMatches)
+    /// <param name="jsonSaveOption">type of serialization of search matches</param>
+    public SearchResult(List<SearchMatch> searchMatches, JsonSaveOption jsonSaveOption)
     {
         _searchMatches = searchMatches;
+        _jsonSaveOption = jsonSaveOption;
         _serializedSearchMatches = SerializeSearchMatches();
     }
 
@@ -30,8 +34,22 @@ public class SearchResult
     private string SerializeSearchMatches()
     {
         var options = new JsonSerializerOptions { WriteIndented = true };
-        var json = JsonSerializer.Serialize(_searchMatches, options);
-        return json;
+        if (_jsonSaveOption == JsonSaveOption.WholeMatch)
+        {
+            var wholeSearchMatch = JsonSerializer.Serialize(_searchMatches, options);
+            return wholeSearchMatch;
+        }
+
+        var list = new List<string>();
+        foreach (var searchMatch in _searchMatches)
+        {
+            if (list.Contains(searchMatch.RegistryKey)) continue;
+
+            list.Add(searchMatch.RegistryKey);
+        }
+
+        var onlyRegistryKeyNames = JsonSerializer.Serialize(list, options);
+        return onlyRegistryKeyNames;
     }
 
 
