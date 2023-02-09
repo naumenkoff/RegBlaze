@@ -48,6 +48,7 @@ public class SearchResult
             list.Add(searchMatch.RegistryKey);
         }
 
+        list.Sort();
         var onlyRegistryKeyNames = JsonSerializer.Serialize(list, options);
         return onlyRegistryKeyNames;
     }

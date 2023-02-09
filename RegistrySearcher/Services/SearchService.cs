@@ -39,13 +39,14 @@ public class SearchService
     public List<SearchMatch> RunRegistrySearch()
     {
         var startingTimestamp = Stopwatch.GetTimestamp();
-        Parallel.Invoke(
-            () => { ExecuteParallelSearch(RegistryHive.CurrentUser); },
-            () => { ExecuteParallelSearch(RegistryHive.LocalMachine); },
-            () => { ExecuteParallelSearch(RegistryHive.Users); },
-            () => { ExecuteParallelSearch(RegistryHive.ClassesRoot); },
-            () => { ExecuteParallelSearch(RegistryHive.CurrentConfig); },
-            () => { ExecuteParallelSearch(RegistryHive.PerformanceData); });
+
+        ExecuteParallelSearch(RegistryHive.CurrentUser);
+        ExecuteParallelSearch(RegistryHive.LocalMachine);
+        ExecuteParallelSearch(RegistryHive.Users);
+        ExecuteParallelSearch(RegistryHive.ClassesRoot);
+        ExecuteParallelSearch(RegistryHive.CurrentConfig);
+        ExecuteParallelSearch(RegistryHive.PerformanceData);
+
         _registrySearchTime = Stopwatch.GetElapsedTime(startingTimestamp);
         return _searchMatches;
     }
@@ -71,7 +72,7 @@ public class SearchService
             _numberOfScannedKeys++;
             try
             {
-                using var nestedKey = registryKey.OpenSubKey(subKeyName);
+                using var nestedKey = registryKey.OpenSubKey(subKeyName, RegistryKeyPermissionCheck.ReadSubTree);
                 if (nestedKey is null) return;
 
                 if (nestedKey.SubKeyCount is 0)
