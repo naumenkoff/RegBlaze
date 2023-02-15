@@ -1,17 +1,26 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Concurrent;
+using System.Text.Json;
 using RegistrySearcher.Enums;
 
 namespace RegistrySearcher.Models;
 
+/// <summary>
+///     Represents a search result object that contains the results of a Windows registry search operation in a serialized
+///     JSON format.
+/// </summary>
 public class SearchResult
 {
     private readonly JsonSaveOption _jsonSaveOption;
-    private readonly List<SearchMatch> _searchMatches;
+    private readonly ConcurrentBag<SearchMatch> _searchMatches;
     private readonly string _serializedSearchMatches;
 
-    /// <param name="searchMatches">the list of search matches that is returned as a result of the search service.</param>
-    /// <param name="jsonSaveOption">type of serialization of search matches</param>
-    public SearchResult(List<SearchMatch> searchMatches, JsonSaveOption jsonSaveOption)
+    /// <summary>
+    ///     Initializes a new instance of the SearchResult class with the specified search matches and JSON serialization
+    ///     option.
+    /// </summary>
+    /// <param name="searchMatches">The collection of search matches obtained from a Windows registry search.</param>
+    /// <param name="jsonSaveOption">The JSON serialization option that specifies how to format the search result data.</param>
+    public SearchResult(ConcurrentBag<SearchMatch> searchMatches, JsonSaveOption jsonSaveOption)
     {
         _searchMatches = searchMatches;
         _jsonSaveOption = jsonSaveOption;
@@ -19,18 +28,18 @@ public class SearchResult
     }
 
     /// <summary>
-    ///     Allows you to get a serialized string based on search matches.
+    ///     Gets the serialized JSON format of the search result.
     /// </summary>
-    /// <returns>serialized json string</returns>
+    /// <returns>The serialized JSON string of the search result.</returns>
     public string GetSerializedSearchMatches()
     {
         return _serializedSearchMatches;
     }
 
     /// <summary>
-    ///     Serializes a SearchMatch type list into a string
+    ///     Serializes the search matches into a JSON format based on the specified JSON serialization option.
     /// </summary>
-    /// <returns>serialized json string</returns>
+    /// <returns>The serialized JSON string of the search result.</returns>
     private string SerializeSearchMatches()
     {
         var options = new JsonSerializerOptions { WriteIndented = true };
@@ -43,9 +52,9 @@ public class SearchResult
         var list = new List<string>();
         foreach (var searchMatch in _searchMatches)
         {
-            if (list.Contains(searchMatch.RegistryKey)) continue;
+            if (list.Contains(searchMatch.Key)) continue;
 
-            list.Add(searchMatch.RegistryKey);
+            list.Add(searchMatch.Key);
         }
 
         list.Sort();
@@ -53,11 +62,10 @@ public class SearchResult
         return onlyRegistryKeyNames;
     }
 
-
     /// <summary>
-    ///     Saves the scan result to the desktop directory
+    ///     Saves the search result to a JSON file and returns the file path.
     /// </summary>
-    /// <returns>the full name of the search results file</returns>
+    /// <returns>The file path of the saved search result.</returns>
     public async Task<string> SaveSearchResult()
     {
         var desktopDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);

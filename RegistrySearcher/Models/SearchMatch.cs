@@ -4,22 +4,22 @@ namespace RegistrySearcher.Models;
 
 public class SearchMatch
 {
-    private string _registryKeyName;
+    private string _key;
     private string _valueData;
     private string _valueName;
 
-    [JsonPropertyName("Registry Key")]
-    public string RegistryKey
+    [JsonPropertyName("Key")]
+    public string Key
     {
-        get => _registryKeyName;
+        get => _key;
         set
         {
-            if (string.IsNullOrEmpty(_registryKeyName)) NumberOfAssignments++;
-            _registryKeyName = value;
+            if (string.IsNullOrEmpty(_key)) NumberOfAssignments++;
+            _key = value;
         }
     }
 
-    [JsonPropertyName("Value Name")]
+    [JsonPropertyName("ValueName")]
     public string ValueName
     {
         get => _valueName;

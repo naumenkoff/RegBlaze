@@ -15,7 +15,8 @@ var option = ConsoleInteractionHelper.RequestKeystroke(
 
 var searchResult = new SearchResult(searchMatches, option);
 ConsoleInteractionHelper.PrintColoredLine(searchResult.GetSerializedSearchMatches(), ConsoleColor.White);
-ConsoleInteractionHelper.PrintColoredLine(searchService.GetServiceResultMessage(), ConsoleColor.Green);
+ConsoleInteractionHelper.PrintColoredLine(searchService.GetServiceResultMessage(searchMatches.Count),
+    ConsoleColor.Green);
 
 if (ConsoleInteractionHelper.RequestKeystroke(
         "Do you want to save the scan result in the desktop directory? (Y -> yes) > ", ConsoleKey.Y, ConsoleColor.Red))
