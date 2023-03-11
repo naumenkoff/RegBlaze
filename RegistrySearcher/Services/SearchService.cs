@@ -71,8 +71,7 @@ public class SearchService
     /// <param name="searchMatches">A collection to store the search results.</param>
     private void RecursiveRegistrySearch(RegistryKey key, ConcurrentBag<SearchMatch> searchMatches)
     {
-        var subKeyNames = key.GetSubKeyNames();
-        Parallel.ForEach(subKeyNames, subKeyName =>
+        Parallel.ForEach(key.GetSubKeyNames(), subKeyName =>
         {
             _numberOfScannedKeys++;
             try
@@ -97,6 +96,8 @@ public class SearchService
                 _numberOfUnsuccessfullyScannedKeys++;
             }
         });
+
+        ProcessRegistryKeyForSearchMatches(key, searchMatches);
     }
 
     /// <summary>
@@ -107,6 +108,8 @@ public class SearchService
     private void ProcessRegistryKeyForSearchMatches(RegistryKey key, ConcurrentBag<SearchMatch> searchMatches)
     {
         var valueNames = key.GetValueNames();
+        if (valueNames.Length == 0) return;
+
         foreach (var valueName in valueNames)
         {
             var searchMatch = new SearchMatch();
