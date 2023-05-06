@@ -27,7 +27,7 @@ public partial class App : Application
         base.OnStartup(e);
     }
 
-    private IServiceProvider ConfigureServices()
+    private static IServiceProvider ConfigureServices()
     {
         var services = new ServiceCollection();
 

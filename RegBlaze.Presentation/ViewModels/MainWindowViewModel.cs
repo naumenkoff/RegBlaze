@@ -77,6 +77,7 @@ public class MainWindowViewModel : ObservableObject
     private async Task OnSearchExecuted(int tasks)
     {
         _totalTasks = tasks;
+        _completedTasks = 0;
 
         for (var i = ProgressBarValue; i > 0; i--)
         {

@@ -16,7 +16,7 @@ public class KeywordChecker : IKeywordChecker
         return containsInKeyNameOrValueName || containsInValue;
     }
 
-    private bool Contains(string input)
+    public bool Contains(string input)
     {
         return input.Contains(_keyword!, StringComparison.InvariantCultureIgnoreCase);
     }
