@@ -26,7 +26,12 @@ public class RegistryKeyProcessor : IRegistryKeyProcessor
             // Software\SomeKeyExample\NestedKeyExample - with checking False, without checking - True
             // Software\SomeKeyExample\NestedKeyExample\Customers - with checking False, without checking - True
             // Without checking the last value, if checking the entire string, all keys will be added.
-            var searchMatch = new SearchMatch(key.Name, default, default);
+            var searchMatch = new SearchMatch
+            {
+                RegistryKey = key.Name,
+                Name = null,
+                Value = null
+            };
             searchMatches.Add(searchMatch);
         }
         else
@@ -36,7 +41,13 @@ public class RegistryKeyProcessor : IRegistryKeyProcessor
                 var value = key.GetValue(valueName) as string;
                 if (!_keywordChecker.CheckForKeyword(key.Name, valueName, value)) continue;
 
-                var searchMatch = new SearchMatch(key.Name, valueName, value);
+                var searchMatch = new SearchMatch
+                {
+                    RegistryKey = key.Name,
+                    Name = valueName,
+                    Value = value
+                };
+
                 searchMatches.Add(searchMatch);
             }
         }
