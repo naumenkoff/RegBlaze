@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
 
 
-        <TextBox Grid.Row="0" Margin="0 0 0 15" Style="{StaticResource TextBoxStyle}" MinWidth="420"
+        <TextBox Grid.Row="0" Style="{StaticResource TextBoxStyle}"
                  MaxWidth="{Binding ActualWidth, ElementName=WrapPanel }">
             <TextBox.InputBindings>
                 <KeyBinding
@@ -37,22 +37,22 @@
             </TextBox.InputBindings>
         </TextBox>
 
-        <WrapPanel x:Name="WrapPanel" Grid.Row="1" HorizontalAlignment="Center">
+        <WrapPanel x:Name="WrapPanel" Grid.Row="1" HorizontalAlignment="Center" Margin="0 15">
             <CheckBox Style="{DynamicResource CheckBoxStyle}" Content="HKEY__CURRENT__CONFIG"
-                      IsChecked="{Binding SearchInCurrentConfig, Mode=OneWayToSource}" />
+                      IsChecked="{Binding Options.CurrentConfig, Mode=OneWayToSource}" />
             <CheckBox Style="{DynamicResource CheckBoxStyle}" Content="HKEY__CLASSES__ROOT"
-                      IsChecked="{Binding SearchInClassesRoot, Mode=OneWayToSource}" />
+                      IsChecked="{Binding Options.ClassesRoot, Mode=OneWayToSource}" />
             <CheckBox Style="{DynamicResource CheckBoxStyle}" Content="HKEY__LOCAL__MACHINE"
-                      IsChecked="{Binding SearchInLocalMachine, Mode=OneWayToSource}" />
+                      IsChecked="{Binding Options.LocalMachine, Mode=OneWayToSource}" />
             <CheckBox Style="{DynamicResource CheckBoxStyle}" Content="HKEY__CURRENT__USER"
-                      IsChecked="{Binding SearchInCurrentUser, Mode=OneWayToSource}" />
+                      IsChecked="{Binding Options.CurrentUser, Mode=OneWayToSource}" />
             <CheckBox Style="{DynamicResource CheckBoxStyle}" Content="HKEY__USERS"
-                      IsChecked="{Binding SearchInUsers, Mode=OneWayToSource}" />
+                      IsChecked="{Binding Options.Users, Mode=OneWayToSource}" />
             <CheckBox Style="{DynamicResource CheckBoxStyle}" Content="HKEY__PERFORMANCE__DATA"
-                      IsChecked="{Binding SearchInPerformanceData, Mode=OneWayToSource}" />
+                      IsChecked="{Binding Options.PerformanceData, Mode=OneWayToSource}" />
         </WrapPanel>
 
-        <ListView ItemContainerStyle="{DynamicResource ListViewItemContainerStyle}" Margin="0 15 0 0"
+        <ListView ItemContainerStyle="{DynamicResource ListViewItemContainerStyle}"
                   ItemTemplate="{DynamicResource ListViewItemTemplate}" Style="{DynamicResource ListViewStyle}"
                   Grid.Row="3" ItemsSource="{Binding SearchMatches, UpdateSourceTrigger=PropertyChanged}">
             <b:Interaction.Behaviors>

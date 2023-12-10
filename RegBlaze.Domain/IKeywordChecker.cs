@@ -1,8 +1,8 @@
-﻿namespace RegBlaze.Core.Models;
+﻿namespace RegBlaze.Domain;
 
 public interface IKeywordChecker
 {
-    void SetKeyword(string keyword);
     bool CheckForKeyword(string registryKeyName, string valueName, string? value);
+
     bool Contains(string input);
 }

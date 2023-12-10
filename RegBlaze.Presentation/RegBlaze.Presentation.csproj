@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\RegBlaze.Core\RegBlaze.Core.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <Page Update="Views\MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <XamlRuntime>Wpf</XamlRuntime>
@@ -24,6 +20,11 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-preview.3.23174.8"/>
         <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3"/>
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\RegBlaze.Domain\RegBlaze.Domain.csproj"/>
+        <ProjectReference Include="..\RegBlaze.Infrastructe\RegBlaze.Infrastructe.csproj"/>
     </ItemGroup>
 
 </Project>

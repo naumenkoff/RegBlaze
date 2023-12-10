@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using RegBlaze.Core.Models;
-using RegBlaze.Core.Services;
+using RegBlaze.Domain;
+using RegBlaze.Infrastructe;
+using RegBlaze.Presentation.Models;
 using RegBlaze.Presentation.ViewModels;
 using RegBlaze.Presentation.Views;
 
@@ -32,12 +33,27 @@ public partial class App : Application
         var services = new ServiceCollection();
 
         services.AddSingleton(provider => new MainWindow
-            { DataContext = provider.GetRequiredService<MainWindowViewModel>() });
+        {
+            DataContext = provider.GetRequiredService<MainWindowViewModel>()
+        });
         services.AddSingleton<MainWindowViewModel>();
-        services.AddSingleton<IRegistryKeyProcessor, RegistryKeyProcessor>();
-        services.AddSingleton<IRegistrySearchService, RegistrySearchService>();
-        services.AddSingleton<IKeywordChecker, KeywordChecker>();
         services.AddSingleton<ITaskTracker, TaskTracker>();
+        services.AddSingleton<ScanningOptions>();
+
+        services.AddSingleton<Func<string, IRegistrySearchService>>(sp => keyword =>
+        {
+            var registryKeyProcessorFactory = sp.GetRequiredService<Func<string, IRegistryKeyProcessor>>();
+            var registryKeyProcessor = registryKeyProcessorFactory(keyword);
+            return new RegistrySearchService(registryKeyProcessor, sp.GetRequiredService<ITaskTracker>());
+        });
+
+        services.AddSingleton<Func<string, IRegistryKeyProcessor>>(sp => keyword =>
+        {
+            var keywordCheckerFactory = sp.GetRequiredService<Func<string, IKeywordChecker>>();
+            var keywordChecker = keywordCheckerFactory(keyword);
+            return new RegistryKeyProcessor(keywordChecker);
+        });
+        services.AddSingleton<Func<string, IKeywordChecker>>(_ => keyword => new KeywordChecker(keyword));
 
         return services.BuildServiceProvider();
     }

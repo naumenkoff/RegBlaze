@@ -1,4 +1,4 @@
-﻿namespace RegBlaze.Core.Services;
+﻿namespace RegBlaze.Domain;
 
 public interface ITaskTracker
 {

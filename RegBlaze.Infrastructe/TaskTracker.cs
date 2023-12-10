@@ -1,4 +1,6 @@
-﻿namespace RegBlaze.Core.Services;
+﻿using RegBlaze.Domain;
+
+namespace RegBlaze.Infrastructe;
 
 public class TaskTracker : ITaskTracker
 {
